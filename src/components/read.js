@@ -5,30 +5,23 @@ import axios from "axios";
 
 //add a constant variable that holds the JSON data for music
 function Read() {
-  //const [data, setData] = useState([]);// To store the raw data from the API 
-  const [music, setMusic] = useState([]);
+  const [music, setMusic] = useState([]); // State to hold the music data
+
   const Reload = () => {
     console.log("Reloading music data...");
-    axios.get('http://localhost:4000/api/musics')// Sending a GET request to fetch musics from the server
-        .then((response) => {
-            setMusic(response.data); // Setting the received data into the state (data)
-        })
-        .catch((error) => {
-            console.error("Error reloading data:", error);// Logging any errors that occur during the request
-        });
-};
-
-useEffect(() => {
-    // Fetching music data from the backend
-    axios.get('http://localhost:4000/api/musics')
+    axios.get('http://localhost:4000/api/musics') // Sending a GET request to fetch musics from the server
       .then((response) => {
-    
-        setMusic(response.data);
+        setMusic(response.data); // Update the state with the fetched data
       })
       .catch((error) => {
-        console.log("Error fetching music:", error);
+        console.error("Error reloading data:", error); // Logging any errors
       });
-  }, []); 
+  };
+
+  useEffect(() => {
+    // Fetch music data on component mount
+    Reload(); // You can call the Reload function here to ensure data is loaded when the component mounts
+  }, []); // Empty dependency array ensures it runs once when the component is mounted
 
   return (
     //music added to connect and display data from music.js
