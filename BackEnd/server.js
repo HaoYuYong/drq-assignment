@@ -1,11 +1,16 @@
 // Importing the Express module to create the application
 const express = require('express');
+const multer = require('multer');
+const path = require('path');
 const app = express();
 const port = 4000;// Setting the port to listen on for incoming requests
 
 // Importing CORS (Cross-Origin Resource Sharing) middleware
 const cors = require('cors');
 app.use(cors());
+
+// Set up static folder to serve images
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Middleware for setting custom headers to allow cross-origin requests
 app.use(function(req, res, next) {
@@ -57,10 +62,23 @@ app.get('/api/music/:id', async (req, res) => {
     res.json(music);
 });
 
+// Configure Multer for file uploads (poster images)
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/'); // Store images in 'uploads' folder
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // Generate unique filename
+  }
+});
+
+const upload = multer({ storage });
+
 // POST route for adding music
-app.post('/api/musics', async (req, res) => {
+app.post('/api/musics', upload.single('poster'), async (req, res) => {
   try {
-    const { title, singer, date, poster } = req.body; // Destructuring the request body to extract music data
+    const { title, singer, date } = req.body; // Destructuring the request body to extract music data
+    const poster = req.file ? `/uploads/${req.file.filename}` : '';
 
     // Check if all required fields are provided
     if (!title || !singer || !date || !poster) {
@@ -87,11 +105,21 @@ app.get('/api/music/:id', async (req ,res)=>{
   res.json(music);
 })
 
-// Route to update a specific music by its ID
-app.put('/api/music/:id', async (req, res)=>{
-  const music = await Music.findByIdAndUpdate(req.params.id, req.body, {new:true});
-  res.send(music);
-})
+app.put('/api/music/:id', upload.single('poster'), async (req, res) => {
+  try {
+    const { title, singer, date } = req.body;
+    const poster = req.file ? `/uploads/${req.file.filename}` : req.body.poster; // Handle poster update
+
+    const updatedMusic = await Music.findByIdAndUpdate(req.params.id, { title, singer, date, poster }, { new: true });
+    if (!updatedMusic) {
+      return res.status(404).json({ message: 'Music not found' });
+    }
+    res.json(updatedMusic);
+  } catch (error) {
+    console.error("Error updating music:", error);
+    res.status(500).json({ message: "Error updating music", error: error.message });
+  }
+});
 
 // Route to delete a specific music by its ID
 app.delete('/api/music/:id', async (req, res) => {

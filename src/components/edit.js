@@ -10,7 +10,8 @@ const Edit = () => {
   const [title, setTitle] = useState('');
   const [singer, setSinger] = useState('');
   const [date, setDate] = useState('');
-  const [poster, setPoster] = useState('');
+  const [poster, setPoster] = useState(''); 
+  const [posterPreview, setPosterPreview] = useState('');
   const navigate = useNavigate();
 
   // useEffect hook to fetch the existing music data when the component mounts
@@ -18,26 +19,41 @@ const Edit = () => {
     axios
       .get('http://localhost:4000/api/music/' + id)
       .then((res) => {
-        console.log('Success: ' + res.data);
+        console.log('Success: ', res.data);
         setTitle(res.data.title);
         setSinger(res.data.singer);
         setDate(res.data.date);
         setPoster(res.data.poster);
+        setPosterPreview(`http://localhost:4000${res.data.poster}`); // Set posterPreview to the existing poster URL
       })
       .catch((err) => {
         console.log(err);
       });
   }, [id]);
 
-  // Handler function for form submission
+ const handlePosterChange = (e) => {
+    setPoster(e.target.files[0]); // Set the poster state to the selected file
+    const file = e.target.files[0];
+    if (file) {
+      setPosterPreview(URL.createObjectURL(file)); // Show a preview of the uploaded image
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    const music = { title, singer, date, poster };
-    console.log('Updated music:', music);
 
-    // Make a PUT request to update the music in the database using the music ID
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('singer', singer);
+    formData.append('date', date);
+    if (poster) {
+      formData.append('poster', poster);
+    } else {
+      formData.append('poster', posterPreview); // Keep the existing poster
+    }
+
     axios
-      .put('http://localhost:4000/api/music/' + id, music)
+      .put(`http://localhost:4000/api/music/${id}`, formData)
       .then((res) => {
         console.log('Edited: ' + res.data);
         navigate('/list');
@@ -73,7 +89,7 @@ const Edit = () => {
         <div className="form-group">
           <label>Edit Publish Date: </label>
           <input
-            type="text"
+            type="date"
             className="form-control"
             value={date}
             onChange={(e) => setDate(e.target.value)}
@@ -82,11 +98,21 @@ const Edit = () => {
         <div className="form-group">
           <label>Edit Music Poster: </label>
           <input
-            type="text"
+            type="file"
             className="form-control"
-            value={poster}
-            onChange={(e) => setPoster(e.target.value)}
+            accept="image/*"
+            onChange={handlePosterChange}
           />
+        </div>
+        <div className="poster-preview-container">
+        <label>Current Poster: </label>
+          {posterPreview && (
+            <img
+              src={posterPreview}
+              alt="Current poster preview"
+              style={{ width: '200px', height: 'auto' }}
+            />
+          )}
         </div>
         <div className="button-container">
           <input type="submit" value="Edit Music" className="btn-primary" />

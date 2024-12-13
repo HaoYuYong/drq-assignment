@@ -62,4 +62,33 @@
     display: flex;
     justify-content: space-between;
   }
+
+  /* Poster preview container */
+.poster-preview-container {
+  margin-top: 20px; 
+  text-align: center; 
+  margin-bottom:20px;
+}
+
+.poster-preview-container label {
+  display: block; 
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #555;
+}
+
+.poster-preview-container img {
+  width: 200px; 
+  height: auto;
+  border-radius: 8px; 
+  border: 2px solid #ddd; 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+  margin-top: 10px; 
+}
+
+.poster-preview-container img:hover {
+  transform: scale(1.05); /* Zoom effect on hover */
+  transition: transform 0.3s ease;
+}
   

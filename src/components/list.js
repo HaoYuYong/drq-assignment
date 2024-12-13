@@ -27,8 +27,8 @@ function Read() {
 
   // Function to handle the delete button click
   const handleDeleteClick = (id) => {
-    setMusicToDelete(id); // Store the ID of the music to be deleted
-    setShowModal(true); // Show the confirmation modal
+    setMusicToDelete(id); 
+    setShowModal(true); 
   };
 
   // Function to confirm the delete action
@@ -59,8 +59,8 @@ function Read() {
 
   // Fetch music data on component mount
   useEffect(() => {
-    Reload(); // Call the Reload function to ensure data is loaded when the component mounts
-  }, []); // Empty dependency array ensures it runs once when the component is mounted
+    Reload(); 
+  }, []);
 
   return (
     <div className="read-container">
@@ -82,7 +82,12 @@ function Read() {
             <div className="music-poster">
               <strong>Poster:</strong>
               <div className="poster-preview">
-                <img src={item.poster} alt={item.title} />
+                {/* <img src={item.poster} alt={item.title} /> */}
+                <img
+                    src={`http://localhost:4000${item.poster}`}
+                  alt={item.title}
+                  style={{ width: "200px", height: "auto" }} // Adjust image size
+                />
               </div>
             </div>
 

@@ -11,26 +11,34 @@ const Create = () => {
   const [title, setTitle] = useState('');
   const [singer, setSinger] = useState('');
   const [date, setDate] = useState('');
-  const [poster, setPoster] = useState('');
+  const [poster, setPoster] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [isConfirmed, setIsConfirmed] = useState(false);
   const navigate = useNavigate();
 
-  // Function to handle form submission
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Create a music object containing the values from the form
-    const music = { title, singer, date, poster };
-    console.log('Music to be sent:', music);
 
-    // Send a POST request to the server to add the new music
-    axios
-      .post('http://localhost:4000/api/musics', music)
-      .then((res) => {
-        console.log(res.data);
-        setShowModal(true);
-      })
-      .catch((error) => console.error('Error:', error));
+   // Function to handle form submission
+   const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('singer', singer);
+    formData.append('date', date);
+    formData.append('poster', poster); // Append the file
+
+    // Send the form data to the server
+    try {
+      const response = await axios.post('http://localhost:4000/api/musics', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data', // Set the content type to multipart/form-data
+        },
+      });
+      console.log(response.data);
+      setShowModal(true);
+    } catch (error) {
+      console.error('Error adding music:', error);
+    }
   };
 
   // Function to close the confirmation modal without further action
@@ -92,10 +100,10 @@ const Create = () => {
         <div className="form-group">
           <label>Add Music Poster: </label>
           <input
-            type="text"
+            type="file"
             className="form-control"
-            value={poster}
-            onChange={(e) => setPoster(e.target.value)}
+            accept="image/*"
+            onChange={(e) => setPoster(e.target.files[0])}
           />
         </div>
         <div className="button-container">
