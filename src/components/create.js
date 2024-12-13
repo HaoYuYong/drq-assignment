@@ -1,35 +1,35 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // Import useNavigate from react-router-dom
+import { useNavigate } from "react-router-dom";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import './createCSS.css'; // Import custom CSS for the form styling
 
 const Create = () => {
   const [title, setTitle] = useState('');
   const [singer, setSinger] = useState('');
+  const [date, setDate] = useState('');
   const [poster, setPoster] = useState('');
-  const [showModal, setShowModal] = useState(false); // State to control modal visibility
-  const [isConfirmed, setIsConfirmed] = useState(false); // State to track if user confirmed action
-  const navigate = useNavigate(); // Initialize the navigate function
+  const [showModal, setShowModal] = useState(false);
+  const [isConfirmed, setIsConfirmed] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const music = { title, singer, poster };
+    const music = { title, singer, date, poster };
     console.log('Music to be sent:', music);
 
     axios
       .post('http://localhost:4000/api/musics', music)
       .then((res) => {
         console.log(res.data);
-
-        // Show the confirmation modal after successfully adding music
         setShowModal(true);
       })
-      .catch((error) => console.error('Error:', error)); // Log the error
+      .catch((error) => console.error('Error:', error));
   };
 
   const handleCloseModal = () => {
-    setShowModal(false); // Close modal without taking action
+    setShowModal(false);
   };
 
   const handleConfirm = () => {
@@ -40,20 +40,21 @@ const Create = () => {
   const handleCancel = () => {
     setTitle('');
     setSinger('');
+    setDate('');
     setPoster('');
-    setShowModal(false); // Close modal and clear the form
+    setShowModal(false);
   };
 
   if (isConfirmed) {
-    navigate("/read"); // Redirect to the music list after confirmation
+    navigate("/read");
   }
 
   return (
-    <div>
-      <h3>Hello from create component</h3>
-      <form onSubmit={handleSubmit}>
+    <div className="create-form-container">
+      <h1 className="form-title">Add New Music</h1>
+      <form onSubmit={handleSubmit} className="create-form">
         <div className="form-group">
-          <label>Add Music: </label>
+          <label>Add Music Title: </label>
           <input
             type="text"
             className="form-control"
@@ -71,6 +72,15 @@ const Create = () => {
           />
         </div>
         <div className="form-group">
+          <label>Publish Date: </label>
+          <input
+            type="date"
+            className="form-control"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
           <label>Add Music Poster: </label>
           <input
             type="text"
@@ -79,7 +89,7 @@ const Create = () => {
             onChange={(e) => setPoster(e.target.value)}
           />
         </div>
-        <div>
+        <div className="button-container">
           <input type="submit" value="Add Music" className="btn btn-primary" />
         </div>
       </form>
