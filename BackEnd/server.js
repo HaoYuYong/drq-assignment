@@ -91,6 +91,17 @@ app.put('/api/music/:id', async (req, res)=>{
   res.send(music);
 })
 
+// Route to delete a specific music by its ID
+app.delete('/api/music/:id', async (req, res) => {
+  console.log('Deleting music with ID:', req.params.id);
+  const music = await Music.findByIdAndDelete(req.params.id);
+  if (music) {
+    res.status(200).send({ message: "Music deleted successfully", music });
+  } else {
+    res.status(404).send({ message: "Music not found" });
+  }
+});
+
 // Starting the server on port 4000
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`); // Logging a message when the server starts
