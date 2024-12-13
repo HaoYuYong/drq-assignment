@@ -6,6 +6,7 @@ import Header from './components/header';
 import Footer from './components/footer';
 import Read from './components/read';
 import Create from './components/create';
+import Edit from './components/edit';
 
 function App() {
   return (
@@ -13,8 +14,9 @@ function App() {
       <NavigationBar />
       <Routes>
         <Route path="/content" element={<Content />} />
-        <Route path="/read" element={<Read />} />
         <Route path="/create" element={<Create />} />
+        <Route path="/read" element={<Read />} />
+        <Route path='/edit/:id' element={<Edit />} />
       </Routes>
       <Footer />
     </Router>

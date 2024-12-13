@@ -51,7 +51,7 @@ app.get('/api/musics', async (req, res) => {
 
 // GET route for fetching a single music by ID
 app.get('/api/music/:id', async (req, res) => {
-    const music = await musicModel.findById(req.params.id);
+    const music = await Music.findById(req.params.id);
     res.json(music);
 });
 
@@ -78,6 +78,18 @@ app.post('/api/musics', async (req, res) => {
     res.status(500).json({ message: "Error adding music", error: error.message });
   }
 });
+
+// Route to get a specific music by its ID
+app.get('/api/music/:id', async (req ,res)=>{
+  const music = await Music.findById(req.params.id);
+  res.json(music);
+})
+
+// Route to update a specific music by its ID
+app.put('/api/music/:id', async (req, res)=>{
+  const music = await Music.findByIdAndUpdate(req.params.id, req.body, {new:true});
+  res.send(music);
+})
 
 // Starting the server on port 4000
 app.listen(port, () => {

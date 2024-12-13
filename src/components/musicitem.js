@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import Card from 'react-bootstrap/Card';
+import { Link } from 'react-router-dom';
 
 const MusicItem = (props) => {
   useEffect(() => {
@@ -15,7 +16,8 @@ const MusicItem = (props) => {
             <p>Artist: {props.mymusic.singer}</p> {/* Display singer */}
             <p>Poster: {props.mymusic.poster}</p> {/* Display poster text (if it's not an image) */}
           </blockquote>
-        </Card.Body>
+        </Card.Body>        
+            <Link to={"/edit/" + props.mymusic._id} className="btn btn-primary">Edit</Link>
       </Card>
     </div>
   );
