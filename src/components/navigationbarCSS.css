@@ -1,0 +1,23 @@
+/* NavigationBar.css */
+
+/* Style for the logo image */
+.navbar-logo {
+    width: 110px;       /* Adjust the width of the logo */
+    height: 60px;       /* Adjust the height of the logo */
+    margin-right: 30px; /* Adjust the margin between the logo and the text */
+  }
+  
+  /* Style for the Home text */
+  .navbar-brand {
+    font-size: 30px;   /* Adjust the font size of Home */
+    font-weight: 500; /* Optional: Make the text bold */
+    margin-right: 30px;
+  }
+  
+  /* Style for Nav links (Add_Music and Music_List) */
+  .nav-link {
+    font-size: 18px;   /* Adjust the font size of the nav links */
+    font-weight: 500;  /* Optional: Adjust font weight */
+    margin-right: 10px;
+  }
+  
