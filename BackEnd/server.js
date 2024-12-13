@@ -33,6 +33,7 @@ mongoose.connect('mongodb+srv://Admin666:singsong333@cluster0.wky8o.mongodb.net/
 const musicSchema = new mongoose.Schema({
   title: String,
   singer: String,
+  date: String,
   poster: String
 });
 
@@ -58,15 +59,15 @@ app.get('/api/music/:id', async (req, res) => {
 // POST route for adding music
 app.post('/api/musics', async (req, res) => {
   try {
-    const { title, singer, poster } = req.body; // Destructuring the request body to extract music data
+    const { title, singer, date, poster } = req.body; // Destructuring the request body to extract music data
 
     // Check if all required fields are provided
-    if (!title || !singer || !poster) {
-      return res.status(400).json({ message: "Missing required fields (title, singer, poster)" });
+    if (!title || !singer || !date || !poster) {
+      return res.status(400).json({ message: "Missing required fields (title, singer, date, poster)" });
     }
 
     // Create a new music document
-    const newMusic = new Music({ title, singer, poster });
+    const newMusic = new Music({ title, singer, date, poster });
 
     // Save the new music document to the database
     await newMusic.save();

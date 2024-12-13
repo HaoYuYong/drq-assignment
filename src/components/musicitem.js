@@ -37,6 +37,7 @@ const MusicItem = (props) => {
         <Card.Body>
           <blockquote className="blockquote mb-0">
             <p>Artist: {props.mymusic.singer}</p> {/* Display singer */}
+            <p>Publish Date: {props.mymusic.date}</p> {/* Display publish date */}
             <p>Poster: {props.mymusic.poster}</p> {/* Display poster text (if it's not an image) */}
           </blockquote>
         </Card.Body>        
