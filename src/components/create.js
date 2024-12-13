@@ -1,3 +1,4 @@
+// Importing necessary libraries and components
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -5,6 +6,7 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import './createCSS.css'; // Import custom CSS for the form styling
 
+// The Create component to add new music
 const Create = () => {
   const [title, setTitle] = useState('');
   const [singer, setSinger] = useState('');
@@ -14,11 +16,14 @@ const Create = () => {
   const [isConfirmed, setIsConfirmed] = useState(false);
   const navigate = useNavigate();
 
+  // Function to handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
+    // Create a music object containing the values from the form
     const music = { title, singer, date, poster };
     console.log('Music to be sent:', music);
 
+    // Send a POST request to the server to add the new music
     axios
       .post('http://localhost:4000/api/musics', music)
       .then((res) => {
@@ -28,15 +33,18 @@ const Create = () => {
       .catch((error) => console.error('Error:', error));
   };
 
+  // Function to close the confirmation modal without further action
   const handleCloseModal = () => {
     setShowModal(false);
   };
 
+  // Function to handle the user confirming the action (redirect to music list)
   const handleConfirm = () => {
     setIsConfirmed(true);
     setShowModal(false);
   };
 
+  // Function to cancel the submission, reset form, and close the modal
   const handleCancel = () => {
     setTitle('');
     setSinger('');
@@ -45,8 +53,9 @@ const Create = () => {
     setShowModal(false);
   };
 
+  // If the user has confirmed, navigate to the music list page
   if (isConfirmed) {
-    navigate("/read");
+    navigate("/list");
   }
 
   return (
@@ -94,7 +103,7 @@ const Create = () => {
         </div>
       </form>
 
-      {/* Confirmation Modal */}
+      {/* Confirmation Modal that appears after the form submission */}
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>Music Added Successfully</Modal.Title>

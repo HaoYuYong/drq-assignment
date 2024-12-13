@@ -1,12 +1,11 @@
+// Importing the Express module to create the application
 const express = require('express');
 const app = express();
-const port = 4000;
+const port = 4000;// Setting the port to listen on for incoming requests
 
 // Importing CORS (Cross-Origin Resource Sharing) middleware
 const cors = require('cors');
 app.use(cors());
-
-//app.use(express.json()); // Parse incoming JSON requests
 
 // Middleware for setting custom headers to allow cross-origin requests
 app.use(function(req, res, next) {
@@ -16,11 +15,12 @@ app.use(function(req, res, next) {
   next();
 });
 
-// Body parser middleware to parse URL-encoded data and JSON data
+// Middleware for parsing request bodies
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// Importing and setting up MongoDB connection using Mongoose
 const mongoose = require('mongoose');
 mongoose.connect('mongodb+srv://Admin666:singsong333@cluster0.wky8o.mongodb.net/MusicDB')
   .then(() => console.log('MongoDB connected'))
@@ -29,7 +29,7 @@ mongoose.connect('mongodb+srv://Admin666:singsong333@cluster0.wky8o.mongodb.net/
     process.exit(1); // Exit if MongoDB connection fails
   });
 
-// Define Schema
+// Define Mongoose schema for 'Music' collection
 const musicSchema = new mongoose.Schema({
   title: String,
   singer: String,
@@ -37,9 +37,10 @@ const musicSchema = new mongoose.Schema({
   poster: String
 });
 
+// Create a 'Music' model using the schema
 const Music = mongoose.model('Music', musicSchema);
 
-// GET route for fetching all music
+// GET route for fetching all music entries
 app.get('/api/musics', async (req, res) => {
   try {
     const musics = await Music.find({});
@@ -50,7 +51,7 @@ app.get('/api/musics', async (req, res) => {
   }
 });
 
-// GET route for fetching a single music by ID
+// GET route for fetching a single music entry by ID
 app.get('/api/music/:id', async (req, res) => {
     const music = await Music.findById(req.params.id);
     res.json(music);

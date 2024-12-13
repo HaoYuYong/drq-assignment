@@ -10,7 +10,7 @@ const NavigationBar = () => {
     <Navbar bg="dark" variant="dark" expand="lg">
       <Container>
         {/* Logo with custom size, using the class for styles */}
-        <Navbar.Brand href="/content">
+        <Navbar.Brand href="/home">
           <img
             src={logo}  // Use the imported logo
             alt="Logo"
@@ -20,7 +20,7 @@ const NavigationBar = () => {
         </Navbar.Brand>
         <Nav className="me-auto">
           <Nav.Link href="/create">Add_Music</Nav.Link>
-          <Nav.Link href="/read">Music_List</Nav.Link>
+          <Nav.Link href="/list">Music_List</Nav.Link>
         </Nav>
       </Container>
     </Navbar>

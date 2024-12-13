@@ -1,13 +1,15 @@
+// Importing necessary modules and components
 import Music from "./musics";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Modal, Button } from "react-bootstrap";
-import './readCSS.css'; // Import the CSS for styling
+import './listCSS.css'; // Import the CSS for styling
 
+// Define the Read component
 function Read() {
-  const [music, setMusic] = useState([]); // State to hold the music data
-  const [showModal, setShowModal] = useState(false); // State to control the delete confirmation modal
-  const [musicToDelete, setMusicToDelete] = useState(null); // State to store the ID of the music to be deleted
+  const [music, setMusic] = useState([]); 
+  const [showModal, setShowModal] = useState(false); 
+  const [musicToDelete, setMusicToDelete] = useState(null); 
 
   // Function to reload the music data
   const Reload = () => {
@@ -19,7 +21,7 @@ function Read() {
         console.log("Music data reloaded:", response.data);
       })
       .catch((error) => {
-        console.error("Error reloading data:", error); // Logging any errors
+        console.error("Error reloading data:", error); 
       });
   };
 
@@ -31,17 +33,18 @@ function Read() {
 
   // Function to confirm the delete action
   const confirmDelete = () => {
-    if (!musicToDelete) return; // If no music selected for deletion, do nothing
+    if (!musicToDelete) return; 
     console.log(`Deleting music with id: ${musicToDelete}`);
     
+    // Send DELETE request to the server to delete the selected music item
     axios
-      .delete(`http://localhost:4000/api/music/${musicToDelete}`) // Send DELETE request to the server
+      .delete(`http://localhost:4000/api/music/${musicToDelete}`) 
       .then((response) => {
         console.log("Music deleted successfully:", response);
-        setShowModal(false); // Close the modal after successful delete
+        setShowModal(false); 
         // Remove the deleted item from the state
         setMusic(music.filter(item => item._id !== musicToDelete)); 
-        setMusicToDelete(null); // Clear the musicToDelete state
+        setMusicToDelete(null); 
       })
       .catch((error) => {
         console.error("Error deleting music:", error);
@@ -50,8 +53,8 @@ function Read() {
 
   // Function to cancel the delete action
   const cancelDelete = () => {
-    setShowModal(false); // Close the modal
-    setMusicToDelete(null); // Clear the musicToDelete state
+    setShowModal(false); 
+    setMusicToDelete(null); 
   };
 
   // Fetch music data on component mount

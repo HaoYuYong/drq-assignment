@@ -1,3 +1,4 @@
+// Importing necessary React hooks and components
 import { useEffect, useState } from "react";
 import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
@@ -5,26 +6,30 @@ import Button from 'react-bootstrap/Button';
 import axios from "axios";
 import Modal from 'react-bootstrap/Modal';
 
+// MusicItem component definition
 const MusicItem = (props) => {
-  const [showConfirm, setShowConfirm] = useState(false); // State to control modal visibility
+  const [showConfirm, setShowConfirm] = useState(false); 
 
+  // useEffect hook to log the music item whenever the 'mymusic' prop changes
   useEffect(() => {
     console.log("Music Item:", props.mymusic);
-  }, [props.mymusic]); // Only run this effect when the mymusic prop changes
+  }, [props.mymusic]); 
 
+  // Function to handle when the delete button is clicked
   const handleDeleteClick = () => {
-    setShowConfirm(true); // Show the confirmation modal when delete button is clicked
+    setShowConfirm(true); 
   };
 
+  // Function to handle the actual deletion of the music item
   const handleDelete = () => {
     axios.delete('http://localhost:4000/api/music/' + props.mymusic._id)
       .then(() => {
-        props.ReloadData(); // Reload music data in parent component
-        setShowConfirm(false); // Hide the confirmation modal after deletion
+        props.ReloadData(); 
+        setShowConfirm(false); 
       })
       .catch((err) => {
-        console.log("Error deleting music:", err); // Handle error if deletion fails
-        setShowConfirm(false); // Hide the modal in case of error as well
+        console.log("Error deleting music:", err); 
+        setShowConfirm(false); 
       });
   };
 
@@ -33,7 +38,7 @@ const MusicItem = (props) => {
   return (
     <div>
       <Card>
-        <Card.Header>Music Title: {props.mymusic.title}</Card.Header> {/* Display title */}
+        <Card.Header>Music Title: {props.mymusic.title}</Card.Header> {/* Display Name */}
         <Card.Body>
           <blockquote className="blockquote mb-0">
             <p>Artist: {props.mymusic.singer}</p> {/* Display singer */}
@@ -45,7 +50,7 @@ const MusicItem = (props) => {
         <Button className="btn btn-danger" onClick={handleDeleteClick}>Delete</Button>
       </Card>
 
-      {/* Confirmation Modal */}
+      {/* Confirmation Modal for deleting the music item */}
       <Modal show={showConfirm} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Confirm Delete</Modal.Title>
